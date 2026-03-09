@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Action Figure Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Space+Grotesk:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background Elements -->
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-container">
+                <span class="logo-icon">🦸‍♂️</span>
+                <h1 class="logo-text">AI<span class="highlight">FIGURE</span></h1>
+            </div>
+            <p class="subtitle">Transform yourself into a collector's edition action figure</p>
+        </header>
+
+        <!-- STATE 1: Upload -->
+        <main class="state-section active" id="upload-state">
+            <div class="upload-card" id="drop-zone">
+                <div class="upload-area">
+                    <div class="upload-icon-wrapper" id="upload-icon-wrapper">
+                        <!-- Simple Upload Icon using SVG -->
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                    </div>
+                    <img id="upload-preview-img" src="" alt="Image Preview"
+                        style="display: none; max-width: 100%; max-height: 200px; border-radius: 12px; border: 2px solid var(--neon-primary); box-shadow: var(--shadow-neon); margin-bottom: 1.5rem; object-fit: cover;">
+                    <h2>1. Upload Your Photo</h2>
+                    <p class="hint-text">Drag and drop or click to browse</p>
+                    <input type="file" id="file-input" accept="image/*" style="display: none;">
+                    <button class="secondary-btn mt-3" id="choose-image-btn" style="margin-bottom: 2rem;">Choose
+                        Image</button>
+                    <!-- Personalization Form -->
+                    <h2 style="font-size: 1.4rem; margin-top: 1rem;">2. Customize Your Figure</h2>
+                    <div class="input-group">
+                        <input type="text" id="hero-name" placeholder="Hero Name (e.g., your favorite hero)"
+                            maxlength="20" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="hero-profession" placeholder="Profession (AI Engineer)" maxlength="30"
+                            required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="hero-accessories" placeholder="Accessories (laptop, coffee)"
+                            maxlength="50" required>
+                    </div>
+                    <div class="input-group" style="margin-top: 1rem;">
+                        <label for="hero-gender"
+                            style="display: block; font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--text-secondary);">Select
+                            Gender:</label>
+                        <select id="hero-gender" class="secondary-btn"
+                            style="width: 100%; border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.8rem; border-radius: 8px; font-family: 'Outfit', sans-serif; background: rgba(0, 0, 0, 0.4); color: white;">
+                            <option value="male">Male</option>
+                            <option value="female" selected>Female</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="margin-top: 1rem;">
+                        <label for="style"
+                            style="display: block; font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--text-secondary);">Select
+                            Generation Style:</label>
+                        <select id="style" class="secondary-btn"
+                            style="width: 100%; border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.8rem; border-radius: 8px; font-family: 'Outfit', sans-serif; background: rgba(0, 0, 0, 0.4); color: white; margin-bottom: 1rem;">
+                            <option value="counterfeit_v30.safetensors">Anime</option>
+                            <option value="DreamShaper_8.safetensors">Fantasy</option>
+                            <option value="anything-v5.safetensors">Anime Portrait</option>
+                            <option value="revAnimated_v122.safetensors">Semi Realistic</option>
+                        </select>
+                    </div>
+
+                    <button class="primary-btn mt-4" id="generate-btn"
+                        style="width: 100%; font-size: 1.2rem; padding: 1rem;">Generate Action Figure</button>
+
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- STATE 2: Processing -->
+        <main class="state-section" id="processing-state">
+            <div class="scanner-container">
+                <div class="scanner-frame">
+                    <div class="target-image-wrapper">
+                        <img id="preview-image" src="" alt="Target">
+                        <div class="scanning-grid"></div>
+                        <div class="scanning-laser"></div>
+                    </div>
+                </div>
+
+                <div class="processing-status">
+                    <h3 class="processing-title">GENERATING FIGURE</h3>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    <p class="processing-step" id="processing-step">Analyzing facial features...</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- STATE 3: Result -->
+        <main class="state-section" id="result-state">
+            <div class="result-container">
+                <!-- 3D Toy Box Element -->
+                <div class="toy-box-showcase" id="toy-box">
+                    <div class="toy-box-card" id="toy-box-card">
+                        <div class="toy-box-inner">
+                            <!-- Front of Box -->
+                            <div class="toy-box-front">
+                                <div class="box-header">
+                                    <span>Limited Edition</span>
+                                    <span>#01</span>
+                                </div>
+                                <div class="box-window">
+                                    <div class="blister-glare"></div>
+                                    <img id="result-figure-img" src="" alt="Action Figure">
+                                </div>
+                                <div class="box-footer">
+                                    <h2 class="figure-name">CUSTOM HERO</h2>
+                                    <span class="age-warning">Ages 8+</span>
+                                </div>
+                            </div>
+                            <!-- Back of Box -->
+                            <div class="toy-box-back">
+                                <div class="box-stats">
+                                    <h4>SKILL ATTRIBUTES</h4>
+                                    <div class="stat-row"><span>Strength</span> <span>99</span></div>
+                                    <div class="stat-row"><span>Agility</span> <span>85</span></div>
+                                    <div class="stat-row"><span>Intelligence</span> <span>95</span></div>
+                                    <div class="stat-row"><span>Charisma</span> <span>100</span></div>
+                                    <div class="barcode"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-panel">
+                    <h3>Minted!</h3>
+                    <p>Your custom AI action figure is ready for display.</p>
+                    <div class="button-group">
+                        <button class="primary-btn" id="flip-btn">Inspect Figure</button>
+                        <button class="primary-btn" id="download-btn">Download Image</button>
+                        <button class="secondary-btn" id="reset-btn">Create Another</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

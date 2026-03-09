@@ -1,0 +1,8 @@
+node_modules
+stable-diffusion-webui
+venv
+*.pth
+*.ckpt
+*.safetensors
+*.pt
+.env

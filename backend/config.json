@@ -1,0 +1,8 @@
+{
+  "sd_model_checkpoint": "counterfeitV30_v30.safetensors",
+  "samples_sampler": "DPM++ 2M",
+  "samples_steps": 25,
+  "samples_cfg_scale": 6,
+  "samples_width": 512,
+  "samples_height": 512
+}
