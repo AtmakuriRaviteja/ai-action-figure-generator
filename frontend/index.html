@@ -24,10 +24,12 @@
     <div class="app-container">
         <!-- Header -->
         <header class="app-header">
-            <div class="logo-container">
-                <span class="logo-icon">🦸‍♂️</span>
-                <h1 class="logo-text">AI<span class="highlight">FIGURE</span></h1>
-            </div>
+            <a href="/" style="text-decoration: none; color: inherit; cursor: pointer; display: inline-block;">
+                <div class="logo-container">
+                    <span class="logo-icon">🦸‍♂️</span>
+                    <h1 class="logo-text">AI<span class="highlight">FIGURE</span></h1>
+                </div>
+            </a>
             <p class="subtitle">Transform yourself into a collector's edition action figure</p>
         </header>
 
@@ -71,8 +73,9 @@
                             Gender:</label>
                         <select id="hero-gender" class="secondary-btn"
                             style="width: 100%; border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.8rem; border-radius: 8px; font-family: 'Outfit', sans-serif; background: rgba(0, 0, 0, 0.4); color: white;">
+                            <option value="auto" selected>Auto Detect</option>
                             <option value="male">Male</option>
-                            <option value="female" selected>Female</option>
+                            <option value="female">Female</option>
                         </select>
                     </div>
                     <div class="input-group" style="margin-top: 1rem;">
@@ -81,17 +84,15 @@
                             Generation Style:</label>
                         <select id="style" class="secondary-btn"
                             style="width: 100%; border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.8rem; border-radius: 8px; font-family: 'Outfit', sans-serif; background: rgba(0, 0, 0, 0.4); color: white; margin-bottom: 1rem;">
-                            <option value="counterfeit_v30.safetensors">Anime</option>
+                            <option value="counterfeitV30_v30.safetensors">Anime</option>
                             <option value="DreamShaper_8.safetensors">Fantasy</option>
                             <option value="anything-v5.safetensors">Anime Portrait</option>
-                            <option value="revAnimated_v122.safetensors">Semi Realistic</option>
+                            <option value="revAnimated_v2Rebirth.safetensors">Semi Realistic</option>
                         </select>
                     </div>
 
                     <button class="primary-btn mt-4" id="generate-btn"
                         style="width: 100%; font-size: 1.2rem; padding: 1rem;">Generate Action Figure</button>
-
-                    </form>
                 </div>
             </div>
         </main>
@@ -165,7 +166,6 @@
                     </div>
                 </div>
             </div>
-        </main>
         </main>
     </div>
 

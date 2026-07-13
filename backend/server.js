@@ -55,36 +55,65 @@ app.post("/generate", upload.single("image"), async (req, res) => {
     return res.status(400).json({ error: "No face detected in image" });
   }
 
+  // Detect gender using python script
+  const detectedGender = await new Promise((resolve) => {
+    exec(`python detect_gender.py "${tempImage}"`, (error, stdout) => {
+      resolve(stdout ? stdout.trim() : "");
+    });
+  });
+
   const base64Image = req.file.buffer.toString("base64");
-  const gender = req.body.gender || "person";
-
-  let genderPrompt = "";
-
-  if (gender === "male") {
-    genderPrompt = "male action figure, masculine face, short hair, strong jawline, no makeup";
-  } else if (gender === "female") {
-    genderPrompt = "female action figure, feminine face, long hair, makeup";
+  const heroName = req.body.name || "Custom Hero";
+  const profession = req.body.profession || "Hero";
+  const accessories = req.body.accessories || "epic gear";
+  
+  // Use detected gender if available and valid, otherwise fallback to frontend gender or "character"
+  let finalGender = "character";
+  
+  if (req.body.gender && req.body.gender !== "auto") {
+    // If user explicitly chose male or female
+    finalGender = req.body.gender;
+  } else if (detectedGender === "male" || detectedGender === "female") {
+    // If set to auto and detection worked
+    finalGender = detectedGender;
+  } else if (req.body.gender) {
+    // Fallback if detection failed but they provided some weird gender
+    finalGender = req.body.gender;
   }
 
+  // Make a clear difference in the prompt based on gender
+  const genderNoun = finalGender === "female" ? "woman" : (finalGender === "male" ? "man" : "person");
+  const genderAdjective = finalGender === "female" ? "female" : (finalGender === "male" ? "male" : "");
+
   const prompt = `
-  3D cartoon vinyl toy action figure,
-  ${genderPrompt},
-  wearing exactly the same clothes as the photo,
-  big head small body proportions,
+  3D collectible vinyl toy action figure of ${heroName},
+  a ${genderAdjective} ${profession} ${genderNoun},
+  holding ${accessories},
   pixar style character,
-  vibrant colors, smooth plastic toy texture,
+  cartoon toy design,
+  big head small body proportions,
+  smooth plastic material,
+  detailed toy sculpt,
   standing inside transparent blister packaging,
-  collectible toy packaging,
-  colorful cardboard backing card,
-  toy accessories beside the figure,
-  professional product photography,
-  studio lighting
+  toy box branding,
+  professional toy product photography,
+  studio lighting,
+  vibrant colors,
+  highly detailed 3D render
   `;
 
-  const negative_prompt = `
-  blurry, low quality, distorted face, bad anatomy,
-  extra arms, extra legs, cropped, watermark, complex background, real skin, photographic skin
-  `;
+  const baseNegative = `
+  realistic photo, photorealistic, skin pores, wrinkles,
+  blurry, low quality, bad anatomy, extra fingers,
+  distorted face, watermark, text`;
+
+  const genderNegative = finalGender === "female" 
+    ? ", man, male, boy, facial hair, beard, mustache" 
+    : (finalGender === "male" ? ", woman, female, girl, breasts" : "");
+
+  const negative_prompt = baseNegative + genderNegative;
+
+  const model = req.body.model;
 
   try {
     const response = await axios.post(
@@ -93,11 +122,13 @@ app.post("/generate", upload.single("image"), async (req, res) => {
         init_images: [base64Image],
         prompt: prompt,
         negative_prompt: negative_prompt,
-        steps: 30,
-        cfg_scale: 7.5,
-        width: 768,
-        height: 768,
-        denoising_strength: 0.6
+        steps: generationConfig.steps,
+        cfg_scale: generationConfig.cfg,
+        sampler_name: generationConfig.sampler,
+        width: generationConfig.width,
+        height: generationConfig.height,
+        denoising_strength: generationConfig.denoising_strength,
+        override_settings: model ? { sd_model_checkpoint: model } : {}
       }
     );
 

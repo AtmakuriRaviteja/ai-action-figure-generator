@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--text-secondary);">Share your figure:</p>
         <div style="display: flex; gap: 10px; justify-content: center;">
             <button id="share-ig" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; padding: 0.5rem 1rem; font-size: 0.9rem;">Instagram</button>
-            <button id="share-tt" style="background: #000; color: white; border: 1px solid #25F4EE; padding: 0.5rem 1rem; font-size: 0.9rem;">TikTok</button>
+            <button id="share-fb" style="background: #1877F2; color: white; padding: 0.5rem 1rem; font-size: 0.9rem;">Facebook</button>
             <button id="share-wa" style="background: #25D366; color: white; padding: 0.5rem 1rem; font-size: 0.9rem;">WhatsApp</button>
         </div>
         <button id="native-share" class="secondary-btn mt-3" style="width: 100%; display: none;">Native Share Options</button>
@@ -268,8 +268,9 @@ document.addEventListener('DOMContentLoaded', () => {
         copyAndAlert("Instagram");
     });
 
-    document.getElementById('share-tt').addEventListener('click', () => {
-        copyAndAlert("TikTok");
+    document.getElementById('share-fb').addEventListener('click', () => {
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(shareText)}`;
+        window.open(facebookUrl, '_blank');
     });
 
     function copyAndAlert(platform) {
