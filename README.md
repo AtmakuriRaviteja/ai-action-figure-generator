@@ -1,6 +1,5 @@
 \# AI Action Figure Generator
-
-
+🚀 **Live Demo**: https://ai-action-figure-generator.vercel.app
 
 Generate collectible toy action figures from photos using Stable Diffusion and Node.js.
 
