@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append("model", style);
             formData.append("gender", gender);
 
-            const response = await fetch('/generate', {
+            const response = await fetch('https://ai-action-figure-generator.onrender.com/generate', {
                 method: 'POST',
                 body: formData
             });

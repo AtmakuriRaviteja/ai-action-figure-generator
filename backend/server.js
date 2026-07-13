@@ -117,7 +117,7 @@ app.post("/generate", upload.single("image"), async (req, res) => {
 
   try {
     const response = await axios.post(
-      "http://127.0.0.1:7860/sdapi/v1/img2img",
+      `${SD_URL}/sdapi/v1/img2img`,
       {
         init_images: [base64Image],
         prompt: prompt,
