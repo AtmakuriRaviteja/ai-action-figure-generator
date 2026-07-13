@@ -69,7 +69,10 @@ node backend/server.js
 
 3\. Open in browser
 
-
+linkedin
+https://www.linkedin.com/in/raviteja-atmakuri-a75a5736a/
+github
+https://github.com/AtmakuriRaviteja
 
 http://localhost:3000
 
