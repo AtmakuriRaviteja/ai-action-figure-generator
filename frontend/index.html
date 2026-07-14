@@ -55,10 +55,7 @@
                         Image</button>
                     <!-- Personalization Form -->
                     <h2 style="font-size: 1.4rem; margin-top: 1rem;">2. Customize Your Figure</h2>
-                    <div class="input-group">
-                        <input type="text" id="hero-name" placeholder="Hero Name (e.g., your favorite hero)"
-                            maxlength="20" required>
-                    </div>
+
                     <div class="input-group">
                         <input type="text" id="hero-profession" placeholder="Profession (AI Engineer)" maxlength="30"
                             required>
@@ -66,6 +63,9 @@
                     <div class="input-group">
                         <input type="text" id="hero-accessories" placeholder="Accessories (laptop, coffee)"
                             maxlength="50" required>
+                    </div>
+                    <div class="input-group" style="margin-top: 1rem;">
+                        <textarea id="hero-custom-prompt" placeholder="Any extra details? (e.g., cyberpunk outfit, wearing a top hat...)" style="resize: vertical; min-height: 80px;"></textarea>
                     </div>
                     <div class="input-group" style="margin-top: 1rem;">
                         <label for="hero-gender"
@@ -148,6 +148,9 @@
                                     <div class="stat-row"><span>Agility</span> <span>85</span></div>
                                     <div class="stat-row"><span>Intelligence</span> <span>95</span></div>
                                     <div class="stat-row"><span>Charisma</span> <span>100</span></div>
+                                    <div class="stat-row" style="margin-top: 10px; border-top: 1px solid var(--border-subtle); padding-top: 10px;">
+                                        <span>Includes</span> <span id="box-accessories-text" style="font-size: 0.8rem; text-align: right; max-width: 60%; color: var(--neon-accent);">Epic Gear</span>
+                                    </div>
                                     <div class="barcode"></div>
                                 </div>
                             </div>

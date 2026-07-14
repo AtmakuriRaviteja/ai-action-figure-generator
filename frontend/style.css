@@ -287,7 +287,8 @@ button {
     text-align: left;
 }
 
-.input-group input {
+.input-group input,
+.input-group textarea {
     width: 100%;
     padding: 12px 15px;
     background: rgba(0, 0, 0, 0.3);
@@ -299,13 +300,15 @@ button {
     transition: all 0.3s ease;
 }
 
-.input-group input:focus {
+.input-group input:focus,
+.input-group textarea:focus {
     outline: none;
     border-color: var(--neon-primary);
     box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
 }
 
-.input-group input::placeholder {
+.input-group input::placeholder,
+.input-group textarea::placeholder {
     color: var(--text-secondary);
 }
 

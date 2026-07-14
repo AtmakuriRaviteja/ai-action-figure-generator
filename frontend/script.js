@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const processingStep = document.getElementById('processing-step');
 
     // Personalization Elements
-    const heroNameInput = document.getElementById('hero-name');
     const heroProfessionInput = document.getElementById('hero-profession');
     const heroAccessoriesInput = document.getElementById('hero-accessories');
+    const heroCustomPromptInput = document.getElementById('hero-custom-prompt');
     const generateBtn = document.getElementById('generate-btn');
 
     // Result Elements
@@ -92,18 +92,19 @@ document.addEventListener('DOMContentLoaded', () => {
     generateBtn.addEventListener('click', () => {
         if (handleFileValidation()) {
             const file = fileInput.files[0];
-            const name = heroNameInput.value.trim() || 'Custom Hero';
+            const name = 'Custom Hero';
             const profession = heroProfessionInput.value.trim() || 'Hero';
             const accessories = heroAccessoriesInput.value.trim() || 'epic gear';
             const style = document.getElementById('style').value; // Get selected style
             const gender = document.getElementById('hero-gender').value;
+            const customPrompt = heroCustomPromptInput ? heroCustomPromptInput.value.trim() : '';
 
-            startProcessing(file, name, profession, accessories, style, gender);
+            startProcessing(file, name, profession, accessories, style, gender, customPrompt);
         }
     });
 
     // --- Processing Logic ---
-    async function startProcessing(file, name, profession, accessories, style, gender) {
+    async function startProcessing(file, name, profession, accessories, style, gender, customPrompt) {
         showState(processingState);
 
         // Show local preview immediately
@@ -151,8 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('accessories', accessories);
             formData.append("model", style);
             formData.append("gender", gender);
+            formData.append("customPrompt", customPrompt);
 
-            const response = await fetch('https://ai-action-figure-generator.onrender.com/generate', {
+            const response = await fetch('/generate', {
                 method: 'POST',
                 body: formData
             });
@@ -166,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.image) {
                 setTimeout(() => {
                     const imgSrc = "data:image/png;base64," + data.image;
-                    showResult(imgSrc);
+                    showResult(imgSrc, name, profession, accessories);
                 }, 500);
             } else {
                 alert("Generation failed: " + (data.error || "Unknown error"));
@@ -182,8 +184,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Result Logic ---
-    function showResult(imageUrl) {
+    function showResult(imageUrl, name, profession, accessories) {
         resultFigureImg.src = imageUrl;
+        
+        const figureNameEl = document.querySelector('.figure-name');
+        if (figureNameEl && name) {
+            figureNameEl.innerText = name.toUpperCase();
+        }
+
+        const limitedEditionEl = document.querySelector('.box-header span:first-child');
+        if (limitedEditionEl && profession) {
+            limitedEditionEl.innerText = profession.toUpperCase();
+        }
+
+        const accessoriesEl = document.getElementById('box-accessories-text');
+        if (accessoriesEl && accessories) {
+            accessoriesEl.innerText = accessories.toUpperCase();
+        }
+
         showState(resultState);
         toyBoxCard.classList.remove('flipped');
     }
@@ -199,9 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     resetBtn.addEventListener('click', () => {
         fileInput.value = '';
-        heroNameInput.value = '';
         heroProfessionInput.value = '';
         heroAccessoriesInput.value = '';
+        if (heroCustomPromptInput) {
+            heroCustomPromptInput.value = '';
+        }
         const previewImg = document.getElementById('upload-preview-img');
         const iconWrapper = document.getElementById('upload-icon-wrapper');
         if (previewImg && iconWrapper) {
